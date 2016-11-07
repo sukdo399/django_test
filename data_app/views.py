@@ -7,6 +7,8 @@ from .models import Post
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
 
+from .ExcelParser import ExcelParser
+
 logger = logging.getLogger('logger')
 
 @login_required
@@ -23,11 +25,23 @@ def post_detail(request, pk):
 
 
 @login_required
+def post_error(request, err):
+    logger.error(err)
+    return render(request, 'data_app/post_error.html', {'err': err})
+
+
+@login_required
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             logger.debug("request.FILES['file']: %s" % request.FILES['file'])
+            try:
+                ExcelParser.get_data(request.FILES['file'])
+            except NameError as e:
+                logger.error(e.args[0])
+                return redirect('post_error', err=e.args[0])
+
             post = form.save(commit=False)
             post.author = request.user
             # post.published_date = timezone.now()
