@@ -1,9 +1,13 @@
+import os
+import logging
+
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
+# from django.utils import timezone
 from .models import Post
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
 
+logger = logging.getLogger('logger')
 
 @login_required
 def post_list(request):
@@ -23,7 +27,7 @@ def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            print("valid")
+            logger.debug("request.FILES['file']: %s" % request.FILES['file'])
             post = form.save(commit=False)
             post.author = request.user
             # post.published_date = timezone.now()
@@ -53,7 +57,7 @@ def post_edit(request, pk):
 @login_required
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    # if request.method == "POST":
+    os.remove(str(post.file))
     post.delete()
 
     return redirect('post_list')
