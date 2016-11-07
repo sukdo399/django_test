@@ -1,0 +1,10 @@
+<form action="" method="post">
+{% csrf_token %}
+      <fieldset>
+        <legend>Log in</legend>
+        <table>
+        {{ form.as_table }}
+        </table>
+        <p><input type="submit" name="blogin" value="Log in"> </p>
+    </fieldset>
+</form>
