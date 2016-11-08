@@ -11,7 +11,7 @@ if __name__ == "__main__":
     logger = logging.getLogger('logger')
 
     fileMaxByte = 1024 * 1024 * 20  # 20MB
-    fileHandler = logging.handlers.RotatingFileHandler('log.log', maxBytes=fileMaxByte, backupCount=1, encoding='utf-8')
+    fileHandler = logging.handlers.RotatingFileHandler('log.log', maxBytes=fileMaxByte, backupCount=3, encoding='utf-8')
     # fileHandler = logging.FileHandler('./log.log')
     streamHandler = logging.StreamHandler()
 

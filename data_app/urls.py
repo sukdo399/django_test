@@ -2,8 +2,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 # from django.views.generic import TemplateView
 from django.contrib.auth import views as django_views
+from rest_framework import routers
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
+
+# router = routers.DefaultRouter()
+# router.register(r'posts', views.RestPostViewSet)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -17,4 +22,15 @@ urlpatterns = [
     url(r'^post/new/$', views.post_new, name='post_new'),
     url(r'^post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
     url(r'^post/(?P<pk>[0-9]+)/remove/$', views.post_remove, name='post_remove'),
+
+    # url(r'^rest-api/', include(router.urls)),
+    url(r'^rest-api/post-list/$', views.rest_post_list),
+    url(r'^rest-api/post-list/(?P<pk>[0-9]+)/$', views.rest_post_detail),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
+
+
+"""
+curl -H 'Accept: application/json; indent=4' -u USER:PASSWORD http://127.0.0.1:8000/rest-api/post-list/
+"""
