@@ -154,9 +154,16 @@ class RestPostList(APIView):
 
         serializer = PostSerializer(data=request_data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            try:
+                ExcelParser.get_data(request.data['file'])
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except NameError as e:
+                logger.error(e.args[0])
+                return Response({"error": e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class RestPostDetail(APIView):
