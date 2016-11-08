@@ -5,11 +5,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 # from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 # from rest_framework import viewsets
-# from rest_framework.response import Response
+from rest_framework.response import Response
+from rest_framework.views import APIView
 # from rest_framework.decorators import api_view
-# from rest_framework import status
+from rest_framework import status
 # from rest_framework import mixins
-from rest_framework import generics
+# from rest_framework import generics
 
 from .models import Post
 from .forms import PostForm
@@ -86,14 +87,16 @@ def post_remove(request, pk):
     return redirect('post_list')
 
 
-class RestPostList(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
-
-class RestPostDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+# # get, post
+# class RestPostList(generics.ListCreateAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+#
+#
+# # get, put, delete
+# class RestPostDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
 
 
 #################################################### use mixin
@@ -133,43 +136,51 @@ class RestPostDetail(generics.RetrieveUpdateDestroyAPIView):
 # from django.http import Http404
 
 
-# class RestPostList(APIView):
-#
-#     def get(self, request, format=None):
-#         snippets = Post.objects.all()
-#         serializer = PostSerializer(snippets, many=True)
-#         return Response(serializer.data)
-#
-#     def post(self, request, format=None):
-#         serializer = PostSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# class RestPostDetail(APIView):
-#
-#     def get_object(self, pk):
-#         try:
-#             return Post.objects.get(pk=pk)
-#         except Post.DoesNotExist:
-#             raise Http404
-#
-#     def get(self, request, pk, format=None):
-#         post = self.get_object(pk)
-#         serializer = PostSerializer(post)
-#         return Response(serializer.data)
-#
-#     def put(self, request, pk, format=None):
-#         post = self.get_object(pk)
-#         serializer = PostSerializer(post, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#     def delete(self, request, pk, format=None):
-#         post = self.get_object(pk)
-#         post.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
+class RestPostList(APIView):
+
+    def get(self, request, format=None):
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        logger.debug("request.user: %s" % request.user)
+        logger.debug("request.user.pk: %s" % request.user.pk)
+        logger.debug("request.auth: %s" % request.auth)
+        logger.debug("request.data: %s" % request.data)
+
+        request_data = request.data
+        request_data["author"] = request.user.pk
+
+        serializer = PostSerializer(data=request_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RestPostDetail(APIView):
+
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        post = self.get_object(pk)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        post = self.get_object(pk)
+        serializer = PostSerializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        post = self.get_object(pk)
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

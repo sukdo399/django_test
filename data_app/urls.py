@@ -32,4 +32,9 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 
 """
 curl -H 'Accept: application/json; indent=4' -u USER:PASSWORD http://127.0.0.1:8000/rest-api/post-list/
+http -a USER:PASSWORD http://127.0.0.1:8000/rest-api/post-list/
+
+curl -X post -H 'Accept: application/json; indent=4' -u USER:PASSWORD -F "file=@/home/shko/work/python/2016-10-14.xlsx" -F "author=1" http://127.0.0.1:8000/rest-api/post-list/
+curl -X post -H 'Accept: application/json; indent=4' -u sh.ko:thzk82dpf@! -F "file=@/home/shko/work/python/2016-10-14.xlsx" http://127.0.0.1:8000/rest-api/post-list/
+
 """
