@@ -23,9 +23,8 @@ urlpatterns = [
     url(r'^post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
     url(r'^post/(?P<pk>[0-9]+)/remove/$', views.post_remove, name='post_remove'),
 
-    # url(r'^rest-api/', include(router.urls)),
-    url(r'^rest-api/post-list/$', views.rest_post_list),
-    url(r'^rest-api/post-list/(?P<pk>[0-9]+)/$', views.rest_post_detail),
+    url(r'^rest-api/post-list/$', views.RestPostList.as_view()),
+    url(r'^rest-api/post-list/(?P<pk>[0-9]+)/$', views.RestPostDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
