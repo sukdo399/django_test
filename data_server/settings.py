@@ -25,8 +25,13 @@ SECRET_KEY = 'cogto_nak$6=e&=2$nsx+asthg_!%ywv6&6+#*g=i5ae8@2#wi'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+
+FILE_UPLOAD_HANDLERS = [
+    "django_extention.uploadhandler.RelativePathTemporaryFileUploadHandler",
+    "django_extention.uploadhandler.RelativePathMemoryFileUploadHandler",
+]
 
 # Application definition
 
