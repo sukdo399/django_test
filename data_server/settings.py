@@ -28,10 +28,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-FILE_UPLOAD_HANDLERS = [
-    "django_extention.uploadhandler.RelativePathTemporaryFileUploadHandler",
-    "django_extention.uploadhandler.RelativePathMemoryFileUploadHandler",
-]
+# FILE_UPLOAD_HANDLERS = [
+#     "django_extention.uploadhandler.RelativePathTemporaryFileUploadHandler",
+#     "django_extention.uploadhandler.RelativePathMemoryFileUploadHandler",
+# ]
 
 # Application definition
 
