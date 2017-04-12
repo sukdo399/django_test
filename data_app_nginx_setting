@@ -1,0 +1,15 @@
+server {
+    listen 8000;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/shko/work/db_server/data_app;
+    }
+
+    location / {
+        # network 연결 핸들링에 필요한 uwsgi 파라메터를 포함
+        include uwsgi_params;
+        # uwsgi_pass를 이용해서 트래픽을 프로젝트 폴더에 있는 sock 파일로 전달
+        uwsgi_pass unix:/home/shko/work/db_server/db_server_uwsgi.sock;
+    }
+}
