@@ -27,11 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
-# FILE_UPLOAD_HANDLERS = [
-#     "django_extention.uploadhandler.RelativePathTemporaryFileUploadHandler",
-#     "django_extention.uploadhandler.RelativePathMemoryFileUploadHandler",
-# ]
+FILE_UPLOAD_HANDLERS = (
+    # "django_extention.uploadhandler.RelativePathMemoryFileUploadHandler",
+    # "django_extention.uploadhandler.RelativePathTemporaryFileUploadHandler",
+    # "django_excel.ExcelMemoryFileUploadHandler",
+    # "django_excel.TemporaryExcelFileUploadHandler",
+    "django_extention.exceluploadhandler.ExcelMemoryFileUploadHandler",
+    "django_extention.exceluploadhandler.TemporaryExcelFileUploadHandler",
+)
 
 # Application definition
 
@@ -42,8 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
 
     'rest_framework',
+
+    'django_cleanup',
 
     'data_app',
 ]
@@ -71,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -82,10 +89,22 @@ WSGI_APPLICATION = 'data_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'ATOMIC_REQUESTS': True,
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'data_app',
+        'USER': 'root',
+        'PASSWORD': 'dfsadfasdf',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -116,7 +135,8 @@ REST_FRAMEWORK = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
 TIME_ZONE = 'Asia/Seoul'
 
@@ -135,3 +155,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 99999
+
+MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
