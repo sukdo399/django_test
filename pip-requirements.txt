@@ -1,5 +1,5 @@
 Django==1.10.3
-djangorestframework==3.5.2
+djangorestframework==3.11.2
 django-braces==1.10.0
 django-extensions==1.7.6
 django-excel==0.0.6
